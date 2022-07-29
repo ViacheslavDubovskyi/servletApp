@@ -9,10 +9,16 @@ import java.io.PrintWriter;
 
 @WebServlet("/viewByIDServlet")
 public class ViewByIDServlet extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+        PrintWriter out;
+
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         String sid = request.getParameter("id");
         int id = Integer.parseInt(sid);

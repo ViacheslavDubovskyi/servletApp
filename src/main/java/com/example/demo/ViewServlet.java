@@ -12,10 +12,16 @@ import java.util.List;
 @WebServlet("/viewServlet")
 public class ViewServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+        PrintWriter out;
+
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         List<Employee> list = EmployeeRepository.getAllEmployees();
         getAllEmployees(list, out);

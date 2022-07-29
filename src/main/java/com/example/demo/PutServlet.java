@@ -12,10 +12,16 @@ import java.io.PrintWriter;
 public class PutServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
+        PrintWriter out;
+
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         String sid = request.getParameter("id");
         int id = Integer.parseInt(sid);
@@ -31,11 +37,16 @@ public class PutServlet extends HttpServlet {
 
         int status = EmployeeRepository.update(employee);
 
-        if (status > 0) {
-            response.sendRedirect("viewServlet");
-        } else {
+        try {
+            if (status > 0) {
+                response.sendRedirect("viewServlet");
+            } else {
+                throw new IOException();
+            }
+        } catch (IOException e) {
             out.println("Sorry! unable to update record");
+        } finally {
+            out.close();
         }
-        out.close();
     }
 }

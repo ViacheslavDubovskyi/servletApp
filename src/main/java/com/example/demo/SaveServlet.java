@@ -12,12 +12,18 @@ import java.io.PrintWriter;
 public class SaveServlet extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
 
-        PrintWriter out = response.getWriter();
+        PrintWriter out;
+
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         String name = request.getParameter("name");
         String email = request.getParameter("email");
