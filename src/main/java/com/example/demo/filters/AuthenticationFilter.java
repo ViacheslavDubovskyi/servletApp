@@ -1,4 +1,4 @@
-package com.example.demo.filters;
+/*package com.example.demo.filters;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -42,3 +42,4 @@ public class AuthenticationFilter implements Filter {
         //close any resources here
     }
 }
+*/
