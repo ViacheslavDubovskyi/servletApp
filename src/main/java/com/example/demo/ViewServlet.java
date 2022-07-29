@@ -18,10 +18,25 @@ public class ViewServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         List<Employee> list = EmployeeRepository.getAllEmployees();
+        getAllEmployees(list, out);
+    }
 
+    private void printEmployees(List<Employee> list, PrintWriter out) {
         for (Employee employee : list) {
             out.print(employee);
         }
-        out.close();
+    }
+
+    private void getAllEmployees(List<Employee> list, PrintWriter out) {
+        try {
+            printEmployees(list, out);
+            if (list.isEmpty()) {
+                throw new IOException();
+            }
+        } catch (IOException e) {
+            out.println("The table is Empty!");
+        } finally {
+            out.close();
+        }
     }
 }
