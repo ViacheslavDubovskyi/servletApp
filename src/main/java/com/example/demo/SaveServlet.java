@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,16 +15,7 @@ public class SaveServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-
-        PrintWriter out;
-
-        try {
-            out = response.getWriter();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        PrintWriter out = getWriter(response);
 
         String name = request.getParameter("name");
         String email = request.getParameter("email");
@@ -34,24 +24,11 @@ public class SaveServlet extends HttpServlet {
         Employee employee = new Employee();
         setEmployeeInformation(employee, name, email, country);
 
-        //out.println(employee.toString());
-        //out.println(EmployeeRepository.getConnection());
-
         int status = EmployeeRepository.save(employee);
-        //out.println(status);
-
-        if (status > 0) {
-            out.print("Record saved successfully!" + '\n');
-            out.print("Name: " + name + '\n');
-            out.print("Email: " + email + '\n');
-            out.print("Country: " + country + '\n');
-        } else {
-            out.println("Sorry! unable to save record");
-        }
-        out.close();
+        printStatus(employee, status, out);
     }
 
-    private void setEmployeeInformation(Employee employee, String name, String email, String country) {
+    public void setEmployeeInformation(Employee employee, String name, String email, String country) {
         employee.setName(name);
         employee.setEmail(email);
         employee.setCountry(country);
@@ -65,5 +42,29 @@ public class SaveServlet extends HttpServlet {
         String empCountry = employee.getCountry();
         usersMap.put(empID, new Employee(empName, empEmail, empCountry));
         return usersMap;
+    }
+
+    public PrintWriter getWriter(HttpServletResponse response) {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return out;
+    }
+
+    public void printStatus(Employee employee, int status, PrintWriter out) {
+        if (status > 0) {
+            out.print("Record saved successfully!" + '\n');
+            out.print("Name: " + employee.getName() + '\n');
+            out.print("Email: " + employee.getEmail() + '\n');
+            out.print("Country: " + employee.getCountry() + '\n');
+        } else {
+            out.println("Sorry! unable to save record");
+        }
+        out.close();
     }
 }
