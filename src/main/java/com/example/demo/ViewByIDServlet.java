@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet("/viewByIDServlet")
 public class ViewByIDServlet extends HttpServlet {
@@ -22,10 +24,17 @@ public class ViewByIDServlet extends HttpServlet {
 
         String sid = request.getParameter("id");
         int id = Integer.parseInt(sid);
-
         Employee employee = EmployeeRepository.getEmployeeById(id);
 
-        out.print(employee);
+        PutServlet putServlet = new PutServlet();
+        Map<Integer, Employee> usersMap = putServlet.putUserToMap(employee);
+
+        if (usersMap.containsKey(id)) {
+            out.print(employee);
+        } else {
+            out.print("No user with such ID!");
+        }
         out.close();
+
     }
 }

@@ -39,6 +39,15 @@ public class Employee {
         this.email = email;
     }
 
+    public Employee() {
+
+    }
+    public Employee(String name, String country, String email) {
+        this.name = name;
+        this.country = country;
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
