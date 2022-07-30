@@ -16,12 +16,15 @@ public class DeleteServlet extends HttpServlet {
         String sid = request.getParameter("id");
         int id = Integer.parseInt(sid);
         EmployeeRepository.delete(id);
+        printDeletingMessage(response, id);
+    }
+
+    private void printDeletingMessage(HttpServletResponse response, int id) {
         response.setContentType("text/html");
         PrintWriter out;
-
         try {
             out = response.getWriter();
-            out.println("Deleting by ID " + id + " was successful");
+            out.println("Deleting user by ID " + id + " was successful");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
