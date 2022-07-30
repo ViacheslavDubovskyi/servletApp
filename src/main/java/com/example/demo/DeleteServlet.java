@@ -13,8 +13,7 @@ public class DeleteServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-        String sid = request.getParameter("id");
-        int id = Integer.parseInt(sid);
+        int id = EmployeeRepository.idForUser(request);
         EmployeeRepository.delete(id);
         printDeletingMessage(response, id);
     }

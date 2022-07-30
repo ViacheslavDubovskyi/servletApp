@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -159,9 +160,17 @@ public class EmployeeRepository {
         return out;
     }
 
-    public static void setEmployeeInformation(Employee employee, String name, String email, String country) {
+    public static void setEmployeeInformation(HttpServletRequest request, Employee employee) {
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String country = request.getParameter("country");
         employee.setName(name);
         employee.setEmail(email);
         employee.setCountry(country);
+    }
+
+    public static int idForUser(HttpServletRequest request) {
+        String sid = request.getParameter("id");
+        return Integer.parseInt(sid);
     }
 }

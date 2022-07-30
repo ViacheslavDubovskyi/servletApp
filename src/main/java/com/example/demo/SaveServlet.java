@@ -18,12 +18,8 @@ public class SaveServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = EmployeeRepository.getWriter(response);
 
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
-
         Employee employee = new Employee();
-        EmployeeRepository.setEmployeeInformation(employee, name, email, country);
+        EmployeeRepository.setEmployeeInformation(request, employee);
 
         int status = EmployeeRepository.save(employee);
         printStatus(employee, status, out);

@@ -15,8 +15,7 @@ public class ViewByIDServlet extends HttpServlet {
 
         PrintWriter out = EmployeeRepository.getWriter(response);
 
-        String sid = request.getParameter("id");
-        int id = Integer.parseInt(sid);
+        int id = EmployeeRepository.idForUser(request);
         Employee employee = EmployeeRepository.getEmployeeById(id);
 
         SaveServlet saveServlet = new SaveServlet();

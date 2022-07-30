@@ -15,17 +15,11 @@ public class PutServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         PrintWriter out = EmployeeRepository.getWriter(response);
-
-        String sid = request.getParameter("id");
-        int id = Integer.parseInt(sid);
-
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
+        int id = EmployeeRepository.idForUser(request);
 
         Employee employee = new Employee();
         employee.setId(id);
-        EmployeeRepository.setEmployeeInformation(employee, name, email, country);
+        EmployeeRepository.setEmployeeInformation(request, employee);
 
         int status = EmployeeRepository.update(employee);
         printStatus(employee, status, id, out);
@@ -34,6 +28,7 @@ public class PutServlet extends HttpServlet {
     private void printStatus(Employee employee, int status, int id, PrintWriter out) {
         try {
             if (status > 0) {
+                out.println("Record is successfully update!");
                 out.println("New parameters for user with ID : " + id);
                 out.print("Name: " + employee.getName() + '\n');
                 out.print("Email: " + employee.getEmail() + '\n');
