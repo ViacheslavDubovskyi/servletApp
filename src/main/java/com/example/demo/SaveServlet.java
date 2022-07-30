@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet("/saveServlet")
 public class SaveServlet extends HttpServlet {
@@ -53,5 +55,15 @@ public class SaveServlet extends HttpServlet {
         employee.setName(name);
         employee.setEmail(email);
         employee.setCountry(country);
+    }
+
+    public Map<Integer, Employee> putUserToMap(Employee employee) {
+        Map<Integer, Employee> usersMap = new HashMap<>();
+        int empID = employee.getId();
+        String empName = employee.getName();
+        String empEmail = employee.getEmail();
+        String empCountry = employee.getCountry();
+        usersMap.put(empID, new Employee(empName, empEmail, empCountry));
+        return usersMap;
     }
 }

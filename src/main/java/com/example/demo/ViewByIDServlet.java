@@ -26,8 +26,8 @@ public class ViewByIDServlet extends HttpServlet {
         int id = Integer.parseInt(sid);
         Employee employee = EmployeeRepository.getEmployeeById(id);
 
-        PutServlet putServlet = new PutServlet();
-        Map<Integer, Employee> usersMap = putServlet.putUserToMap(employee);
+        SaveServlet saveServlet = new SaveServlet();
+        Map<Integer, Employee> usersMap = saveServlet.putUserToMap(employee);
 
         if (usersMap.containsKey(id)) {
             out.print(employee);
