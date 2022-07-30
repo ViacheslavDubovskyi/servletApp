@@ -15,23 +15,18 @@ public class SaveServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
-        PrintWriter out = getWriter(response);
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = EmployeeRepository.getWriter(response);
 
         String name = request.getParameter("name");
         String email = request.getParameter("email");
         String country = request.getParameter("country");
 
         Employee employee = new Employee();
-        setEmployeeInformation(employee, name, email, country);
+        EmployeeRepository.setEmployeeInformation(employee, name, email, country);
 
         int status = EmployeeRepository.save(employee);
         printStatus(employee, status, out);
-    }
-
-    public void setEmployeeInformation(Employee employee, String name, String email, String country) {
-        employee.setName(name);
-        employee.setEmail(email);
-        employee.setCountry(country);
     }
 
     public Map<Integer, Employee> putUserToMap(Employee employee) {
@@ -44,19 +39,7 @@ public class SaveServlet extends HttpServlet {
         return usersMap;
     }
 
-    public PrintWriter getWriter(HttpServletResponse response) {
-        response.setContentType("text/plain");
-        response.setCharacterEncoding("UTF-8");
-        PrintWriter out;
-        try {
-            out = response.getWriter();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return out;
-    }
-
-    public void printStatus(Employee employee, int status, PrintWriter out) {
+    private void printStatus(Employee employee, int status, PrintWriter out) {
         if (status > 0) {
             out.print("Record saved successfully!" + '\n');
             out.print("Name: " + employee.getName() + '\n');

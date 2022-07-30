@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,5 +146,22 @@ public class EmployeeRepository {
             e.printStackTrace();
         }
         return listEmployees;
+    }
+
+    public static PrintWriter getWriter(HttpServletResponse response) {
+        response.setContentType("text/plain");
+        PrintWriter out;
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return out;
+    }
+
+    public static void setEmployeeInformation(Employee employee, String name, String email, String country) {
+        employee.setName(name);
+        employee.setEmail(email);
+        employee.setCountry(country);
     }
 }

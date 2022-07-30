@@ -14,15 +14,7 @@ public class ViewServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-        response.setContentType("text/html");
-        PrintWriter out;
-
-        try {
-            out = response.getWriter();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        PrintWriter out = EmployeeRepository.getWriter(response);
         List<Employee> list = EmployeeRepository.getAllEmployees();
         getAllEmployees(list, out);
     }

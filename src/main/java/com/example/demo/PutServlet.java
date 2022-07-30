@@ -14,32 +14,30 @@ public class PutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
-        response.setContentType("text/html");
-        PrintWriter out;
-
-        try {
-            out = response.getWriter();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        PrintWriter out = EmployeeRepository.getWriter(response);
 
         String sid = request.getParameter("id");
         int id = Integer.parseInt(sid);
 
         String name = request.getParameter("name");
         String email = request.getParameter("email");
+        String country = request.getParameter("country");
 
         Employee employee = new Employee();
         employee.setId(id);
-        employee.setName(name);
-        employee.setEmail(email);
-        employee.setCountry(request.getParameter("country"));
+        EmployeeRepository.setEmployeeInformation(employee, name, email, country);
 
         int status = EmployeeRepository.update(employee);
+        printStatus(employee, status, id, out);
+    }
 
+    private void printStatus(Employee employee, int status, int id, PrintWriter out) {
         try {
             if (status > 0) {
-                response.sendRedirect("viewServlet");
+                out.println("New parameters for user with ID : " + id);
+                out.print("Name: " + employee.getName() + '\n');
+                out.print("Email: " + employee.getEmail() + '\n');
+                out.print("Country: " + employee.getCountry() + '\n');
             } else {
                 throw new IOException();
             }
