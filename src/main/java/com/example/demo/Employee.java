@@ -46,6 +46,6 @@ public class Employee {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", country='" + country + '\'' +
-                '}';
+                '}' + '\n';
     }
 }
