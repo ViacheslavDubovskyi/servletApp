@@ -24,7 +24,7 @@ public class ViewByIDServlet extends HttpServlet {
         isExist(usersMap, out, employee, id);
     }
 
-    public void isExist(Map<Integer, Employee> usersMap, PrintWriter out, Employee employee, int id) {
+    private void isExist(Map<Integer, Employee> usersMap, PrintWriter out, Employee employee, int id) {
         if (usersMap.containsKey(id)) {
             out.print(employee);
         } else {
