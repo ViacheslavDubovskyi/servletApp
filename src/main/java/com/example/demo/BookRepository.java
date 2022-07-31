@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeeRepository {
+public class BookRepository {
 
     /*public static void main(String[] args) {
         getConnection();
@@ -24,7 +24,7 @@ public class EmployeeRepository {
     public static Connection getConnection() {
 
         Connection connection = null;
-        String url = "jdbc:postgresql://localhost:5432/employee";
+        String url = "jdbc:postgresql://localhost:5432/library";
         String user = "postgres";
         String password = "tranquilo22";
 
@@ -41,14 +41,14 @@ public class EmployeeRepository {
         return connection;
     }
 
-    public static int save(Employee employee) {
+    public static int save(Book book) {
         int status = 0;
         try {
-            Connection connection = EmployeeRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("insert into users(name,email,country) values (?,?,?)");
-            ps.setString(1, employee.getName());
-            ps.setString(2, employee.getEmail());
-            ps.setString(3, employee.getCountry());
+            Connection connection = BookRepository.getConnection();
+            PreparedStatement ps = connection.prepareStatement("insert into books(title,author,year) values (?,?,?)");
+            ps.setString(1, book.getTitle());
+            ps.setString(2, book.getAuthor());
+            ps.setString(3, book.getYear());
 
             status = ps.executeUpdate();
             connection.close();
@@ -59,17 +59,17 @@ public class EmployeeRepository {
         return status;
     }
 
-    public static int update(Employee employee) {
+    public static int update(Book book) {
 
         int status = 0;
 
         try {
-            Connection connection = EmployeeRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("update users set name=?,email=?,country=? where id=?");
-            ps.setString(1, employee.getName());
-            ps.setString(2, employee.getEmail());
-            ps.setString(3, employee.getCountry());
-            ps.setInt(4, employee.getId());
+            Connection connection = BookRepository.getConnection();
+            PreparedStatement ps = connection.prepareStatement("update books set title=?,author=?,year=? where id=?");
+            ps.setString(1, book.getTitle());
+            ps.setString(2, book.getAuthor());
+            ps.setString(3, book.getYear());
+            ps.setInt(4, book.getId());
 
             status = ps.executeUpdate();
             connection.close();
@@ -85,8 +85,8 @@ public class EmployeeRepository {
         int status = 0;
 
         try {
-            Connection connection = EmployeeRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("delete from users where id=?");
+            Connection connection = BookRepository.getConnection();
+            PreparedStatement ps = connection.prepareStatement("delete from books where id=?");
             ps.setInt(1, id);
             status = ps.executeUpdate();
 
@@ -98,55 +98,55 @@ public class EmployeeRepository {
         return status;
     }
 
-    public static Employee getEmployeeById(int id) {
+    public static Book getBookById(int id) {
 
-        Employee employee = new Employee();
+        Book book = new Book();
 
         try {
-            Connection connection = EmployeeRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("select * from users where id=?");
+            Connection connection = BookRepository.getConnection();
+            PreparedStatement ps = connection.prepareStatement("select * from books where id=?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                employee.setId(rs.getInt(1));
-                employee.setName(rs.getString(2));
-                employee.setEmail(rs.getString(3));
-                employee.setCountry(rs.getString(4));
+                book.setId(rs.getInt(1));
+                book.setTitle(rs.getString(2));
+                book.setAuthor(rs.getString(3));
+                book.setYear(rs.getString(4));
             }
             connection.close();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return employee;
+        return book;
     }
 
-    public static List<Employee> getAllEmployees() {
+    public static List<Book> getAllBooks() {
 
-        List<Employee> listEmployees = new ArrayList<>();
+        List<Book> listBooks = new ArrayList<>();
 
         try {
-            Connection connection = EmployeeRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("select * from users");
+            Connection connection = BookRepository.getConnection();
+            PreparedStatement ps = connection.prepareStatement("select * from books");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
-                Employee employee = new Employee();
+                Book book = new Book();
 
-                employee.setId(rs.getInt(1));
-                employee.setName(rs.getString(2));
-                employee.setEmail(rs.getString(3));
-                employee.setCountry(rs.getString(4));
+                book.setId(rs.getInt(1));
+                book.setTitle(rs.getString(2));
+                book.setAuthor(rs.getString(3));
+                book.setYear(rs.getString(4));
 
-                listEmployees.add(employee);
+                listBooks.add(book);
             }
             connection.close();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return listEmployees;
+        return listBooks;
     }
 
     public static PrintWriter getWriter(HttpServletResponse response) {
@@ -160,16 +160,16 @@ public class EmployeeRepository {
         return out;
     }
 
-    public static void setEmployeeInformation(HttpServletRequest request, Employee employee) {
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String country = request.getParameter("country");
-        employee.setName(name);
-        employee.setEmail(email);
-        employee.setCountry(country);
+    public static void setBookInformation(HttpServletRequest request, Book book) {
+        String title = request.getParameter("title");
+        String author = request.getParameter("author");
+        String year = request.getParameter("year");
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setYear(year);
     }
 
-    public static int idForUser(HttpServletRequest request) {
+    public static int idForBook(HttpServletRequest request) {
         String sid = request.getParameter("id");
         return Integer.parseInt(sid);
     }

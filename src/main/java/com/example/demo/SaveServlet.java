@@ -4,7 +4,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,31 +15,31 @@ public class SaveServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         response.setCharacterEncoding("UTF-8");
-        PrintWriter out = EmployeeRepository.getWriter(response);
+        PrintWriter out = BookRepository.getWriter(response);
 
-        Employee employee = new Employee();
-        EmployeeRepository.setEmployeeInformation(request, employee);
+        Book book = new Book();
+        BookRepository.setBookInformation(request, book);
 
-        int status = EmployeeRepository.save(employee);
-        printStatus(employee, status, out);
+        int status = BookRepository.save(book);
+        printStatus(book, status, out);
     }
 
-    public Map<Integer, Employee> putUserToMap(Employee employee) {
-        Map<Integer, Employee> usersMap = new HashMap<>();
-        int empID = employee.getId();
-        String empName = employee.getName();
-        String empEmail = employee.getEmail();
-        String empCountry = employee.getCountry();
-        usersMap.put(empID, new Employee(empName, empEmail, empCountry));
+    public Map<Integer, Book> putUserToMap(Book book) {
+        Map<Integer, Book> usersMap = new HashMap<>();
+        int empID = book.getId();
+        String bookTitle = book.getTitle();
+        String bookAuthor = book.getAuthor();
+        String bookYear = book.getYear();
+        usersMap.put(empID, new Book(bookTitle, bookAuthor, bookYear));
         return usersMap;
     }
 
-    private void printStatus(Employee employee, int status, PrintWriter out) {
+    private void printStatus(Book book, int status, PrintWriter out) {
         if (status > 0) {
             out.print("Record saved successfully!" + '\n');
-            out.print("Name: " + employee.getName() + '\n');
-            out.print("Email: " + employee.getEmail() + '\n');
-            out.print("Country: " + employee.getCountry() + '\n');
+            out.print("Title: " + book.getTitle() + '\n');
+            out.print("Author: " + book.getAuthor() + '\n');
+            out.print("Year: " + book.getYear() + '\n');
         } else {
             out.println("Sorry! unable to save record");
         }

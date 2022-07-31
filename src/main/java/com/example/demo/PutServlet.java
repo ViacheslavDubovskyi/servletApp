@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,25 +13,25 @@ public class PutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
-        PrintWriter out = EmployeeRepository.getWriter(response);
-        int id = EmployeeRepository.idForUser(request);
+        PrintWriter out = BookRepository.getWriter(response);
+        int id = BookRepository.idForBook(request);
 
-        Employee employee = new Employee();
-        employee.setId(id);
-        EmployeeRepository.setEmployeeInformation(request, employee);
+        Book book = new Book();
+        book.setId(id);
+        BookRepository.setBookInformation(request, book);
 
-        int status = EmployeeRepository.update(employee);
-        printStatus(employee, status, id, out);
+        int status = BookRepository.update(book);
+        printStatus(book, status, id, out);
     }
 
-    private void printStatus(Employee employee, int status, int id, PrintWriter out) {
+    private void printStatus(Book book, int status, int id, PrintWriter out) {
         try {
             if (status > 0) {
                 out.println("Record is successfully update!");
-                out.println("New parameters for user with ID : " + id);
-                out.print("Name: " + employee.getName() + '\n');
-                out.print("Email: " + employee.getEmail() + '\n');
-                out.print("Country: " + employee.getCountry() + '\n');
+                out.println("New parameters for book with ID : " + id);
+                out.print("Title: " + book.getTitle() + '\n');
+                out.print("Author: " + book.getAuthor() + '\n');
+                out.print("Year: " + book.getYear() + '\n');
             } else {
                 throw new IOException();
             }

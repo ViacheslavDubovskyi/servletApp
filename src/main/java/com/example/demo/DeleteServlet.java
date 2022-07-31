@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +12,8 @@ public class DeleteServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-        int id = EmployeeRepository.idForUser(request);
-        EmployeeRepository.delete(id);
+        int id = BookRepository.idForBook(request);
+        BookRepository.delete(id);
         printDeletingMessage(response, id);
     }
 
@@ -23,7 +22,7 @@ public class DeleteServlet extends HttpServlet {
         PrintWriter out;
         try {
             out = response.getWriter();
-            out.println("Deleting user by ID " + id + " was successful");
+            out.println("Deleting book by ID " + id + " was successful");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
