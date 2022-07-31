@@ -25,13 +25,13 @@ public class SaveServlet extends HttpServlet {
     }
 
     public Map<Integer, Book> putUserToMap(Book book) {
-        Map<Integer, Book> usersMap = new HashMap<>();
-        int empID = book.getId();
+        Map<Integer, Book> bookMap = new HashMap<>();
+        int bookID = book.getId();
         String bookTitle = book.getTitle();
         String bookAuthor = book.getAuthor();
         String bookYear = book.getYear();
-        usersMap.put(empID, new Book(bookTitle, bookAuthor, bookYear));
-        return usersMap;
+        bookMap.put(bookID, new Book(bookTitle, bookAuthor, bookYear));
+        return bookMap;
     }
 
     private void printStatus(Book book, int status, PrintWriter out) {
