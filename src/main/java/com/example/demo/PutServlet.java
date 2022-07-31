@@ -28,7 +28,7 @@ public class PutServlet extends HttpServlet {
         try {
             if (status > 0) {
                 out.println("Record is successfully update!");
-                out.println("New parameters for book with ID : " + id);
+                out.println("New parameters for book with ID " + id + ":");
                 out.print("Title: " + book.getTitle() + '\n');
                 out.print("Author: " + book.getAuthor() + '\n');
                 out.print("Year: " + book.getYear() + '\n');
