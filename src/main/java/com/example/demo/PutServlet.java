@@ -29,7 +29,7 @@ public class PutServlet extends HttpServlet {
         try {
             if (status > 0) {
                 out.println("Record is successfully update!");
-                out.println("New parameters for user with ID : " + id);
+                out.println("New parameters for user with ID " + id + ":");
                 out.print("Name: " + employee.getName() + '\n');
                 out.print("Email: " + employee.getEmail() + '\n');
                 out.print("Country: " + employee.getCountry() + '\n');
