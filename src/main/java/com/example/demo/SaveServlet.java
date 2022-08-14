@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.interceptor.Logged;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +11,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @WebServlet("/saveServlet")
 public class SaveServlet extends HttpServlet {
 
@@ -34,13 +38,16 @@ public class SaveServlet extends HttpServlet {
         return bookMap;
     }
 
+    @Logged
     private void printStatus(Book book, int status, PrintWriter out) {
         if (status > 0) {
+            log.info("Record saved successfully!");
             out.print("Record saved successfully!" + '\n');
             out.print("Title: " + book.getTitle() + '\n');
             out.print("Author: " + book.getAuthor() + '\n');
             out.print("Year: " + book.getYear() + '\n');
         } else {
+            log.info("Unable to save record");
             out.println("Sorry! unable to save record");
         }
         out.close();

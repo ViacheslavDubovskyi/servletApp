@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.interceptor.Logged;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
+@Slf4j
 @WebServlet("/viewServlet")
 public class ViewServlet extends HttpServlet {
 
@@ -24,10 +28,13 @@ public class ViewServlet extends HttpServlet {
         }
     }
 
+    @Logged
     private void printAllEmployees(List<Book> list, PrintWriter out) {
         try {
             getEmployees(list, out);
+            log.info("Getting all books was successful!");
             if (list.isEmpty()) {
+                log.info("Unable to save record. IOException has appear");
                 throw new IOException();
             }
         } catch (IOException e) {

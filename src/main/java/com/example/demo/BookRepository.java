@@ -14,17 +14,6 @@ import java.util.List;
 @Slf4j
 public class BookRepository {
 
-    /*public static void main(String[] args) {
-        getConnection();
-
-        Employee employee = new Employee();
-
-        employee.setName("oleg");
-        employee.setEmail(" ");
-        employee.setCountry(" ");
-        save(employee);
-    }*/
-
     @Logged
     public static Connection getConnection() {
         Connection connection = null;
@@ -33,15 +22,17 @@ public class BookRepository {
         String password = "tranquilo22";
 
         try {
+            log.info("Trying to connect to the PostgreSQL server...");
             connection = DriverManager.getConnection(url, user, password);
             if (connection != null) {
-                System.out.println("Connected to the PostgreSQL server successfully.");
+                log.info("Connected to the PostgreSQL server successfully!");
             } else {
-                System.out.println("Failed to make connection!");
+                log.info("Failed to make connection!");
             }
 
         } catch (SQLException sqlException) {
             System.out.println(sqlException);
+            log.info("Something went wrong. SQLException appears.");
         }
         return connection;
     }
@@ -52,15 +43,16 @@ public class BookRepository {
         int status = 0;
 
         try {
-            PreparedStatement ps = connection().prepareStatement("insert into books(title,author,year) values (?,?,?)");
+            log.info("Trying to save book in the table...");
+            PreparedStatement ps = getConnection().prepareStatement("insert into books(title,author,year) values (?,?,?)");
             setBookIntoTable(ps, book);
 
             status = ps.executeUpdate();
-            connection().close();
-            log.info("Status of the method: " + status);
+            getConnection().close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
         }
         return status;
     }
@@ -71,15 +63,17 @@ public class BookRepository {
         int status = 0;
 
         try {
-            PreparedStatement ps = connection().prepareStatement("update books set title=?,author=?,year=? where id=?");
+            log.info("Trying to update record...");
+            PreparedStatement ps = getConnection().prepareStatement("update books set title=?,author=?,year=? where id=?");
             setBookIntoTable(ps, book);
             ps.setInt(4, book.getId());
 
             status = ps.executeUpdate();
-            connection().close();
+            getConnection().close();
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
         }
         return status;
     }
@@ -90,13 +84,15 @@ public class BookRepository {
         int status = 0;
 
         try {
-            PreparedStatement ps = connection().prepareStatement("delete from books where id=?");
+            log.info("Trying to delete book with ID " + id + "...");
+            PreparedStatement ps = getConnection().prepareStatement("delete from books where id=?");
             ps.setInt(1, id);
             status = ps.executeUpdate();
-            connection().close();
+            getConnection().close();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
         }
         return status;
     }
@@ -107,16 +103,18 @@ public class BookRepository {
         Book book = new Book();
 
         try {
-            PreparedStatement ps = connection().prepareStatement("select * from books where id=?");
+            log.info("Trying to get book by ID " + id + "...");
+            PreparedStatement ps = getConnection().prepareStatement("select * from books where id=?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                getResultSet(rs, book);
+                getBookFromTheTable(rs, book);
             }
-            connection().close();
+            getConnection().close();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
         }
         return book;
     }
@@ -127,24 +125,22 @@ public class BookRepository {
         List<Book> listBooks = new ArrayList<>();
 
         try {
-            PreparedStatement ps = connection().prepareStatement("select * from books");
+            log.info("Trying to get list of all books from library...");
+            PreparedStatement ps = getConnection().prepareStatement("select * from books");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 Book book = new Book();
-                getResultSet(rs, book);
+                getBookFromTheTable(rs, book);
                 listBooks.add(book);
             }
-            connection().close();
+            getConnection().close();
 
         } catch (SQLException e) {
             e.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
         }
         return listBooks;
-    }
-
-    public static Connection connection() {
-        return getConnection();
     }
 
     public static void setBookIntoTable(PreparedStatement ps, Book book) {
@@ -154,10 +150,11 @@ public class BookRepository {
             ps.setString(3, book.getYear());
         } catch (SQLException e) {
             e.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
         }
     }
 
-    public static void getResultSet(ResultSet rs, Book book) {
+    public static void getBookFromTheTable(ResultSet rs, Book book) {
         try {
             book.setId(rs.getInt(1));
             book.setTitle(rs.getString(2));
@@ -165,6 +162,7 @@ public class BookRepository {
             book.setYear(rs.getString(4));
         } catch (SQLException e) {
             e.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
         }
     }
 
@@ -174,6 +172,7 @@ public class BookRepository {
         try {
             out = response.getWriter();
         } catch (IOException e) {
+            log.info("Something went wrong. IOException has appear");
             throw new RuntimeException(e);
         }
         return out;
@@ -188,7 +187,7 @@ public class BookRepository {
         book.setYear(year);
     }
 
-    public static int idForBook(HttpServletRequest request) {
+    public static int idOfTheBook(HttpServletRequest request) {
         String sid = request.getParameter("id");
         return Integer.parseInt(sid);
     }
