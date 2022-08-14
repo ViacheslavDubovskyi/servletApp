@@ -44,14 +44,11 @@ public class BookRepository {
     public static int save(Book book) {
         int status = 0;
         try {
-            Connection connection = BookRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("insert into books(title,author,year) values (?,?,?)");
-            ps.setString(1, book.getTitle());
-            ps.setString(2, book.getAuthor());
-            ps.setString(3, book.getYear());
+            PreparedStatement ps = connection().prepareStatement("insert into books(title,author,year) values (?,?,?)");
+            setBookIntoTable(ps, book);
 
             status = ps.executeUpdate();
-            connection.close();
+            connection().close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -64,15 +61,12 @@ public class BookRepository {
         int status = 0;
 
         try {
-            Connection connection = BookRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("update books set title=?,author=?,year=? where id=?");
-            ps.setString(1, book.getTitle());
-            ps.setString(2, book.getAuthor());
-            ps.setString(3, book.getYear());
+            PreparedStatement ps = connection().prepareStatement("update books set title=?,author=?,year=? where id=?");
+            setBookIntoTable(ps, book);
             ps.setInt(4, book.getId());
 
             status = ps.executeUpdate();
-            connection.close();
+            connection().close();
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -85,12 +79,11 @@ public class BookRepository {
         int status = 0;
 
         try {
-            Connection connection = BookRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("delete from books where id=?");
+            PreparedStatement ps = connection().prepareStatement("delete from books where id=?");
             ps.setInt(1, id);
             status = ps.executeUpdate();
 
-            connection.close();
+            connection().close();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -103,17 +96,13 @@ public class BookRepository {
         Book book = new Book();
 
         try {
-            Connection connection = BookRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("select * from books where id=?");
+            PreparedStatement ps = connection().prepareStatement("select * from books where id=?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                book.setId(rs.getInt(1));
-                book.setTitle(rs.getString(2));
-                book.setAuthor(rs.getString(3));
-                book.setYear(rs.getString(4));
+                getResultSet(rs, book);
             }
-            connection.close();
+            connection().close();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -126,27 +115,48 @@ public class BookRepository {
         List<Book> listBooks = new ArrayList<>();
 
         try {
-            Connection connection = BookRepository.getConnection();
-            PreparedStatement ps = connection.prepareStatement("select * from books");
+            PreparedStatement ps = connection().prepareStatement("select * from books");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
                 Book book = new Book();
 
-                book.setId(rs.getInt(1));
-                book.setTitle(rs.getString(2));
-                book.setAuthor(rs.getString(3));
-                book.setYear(rs.getString(4));
+                getResultSet(rs, book);
 
                 listBooks.add(book);
             }
-            connection.close();
+            connection().close();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return listBooks;
+    }
+
+    public static Connection connection() {
+        return getConnection();
+    }
+
+    public static void setBookIntoTable(PreparedStatement ps, Book book) {
+        try {
+            ps.setString(1, book.getTitle());
+            ps.setString(2, book.getAuthor());
+            ps.setString(3, book.getYear());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void getResultSet(ResultSet rs, Book book) {
+        try {
+            book.setId(rs.getInt(1));
+            book.setTitle(rs.getString(2));
+            book.setAuthor(rs.getString(3));
+            book.setYear(rs.getString(4));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static PrintWriter getWriter(HttpServletResponse response) {
