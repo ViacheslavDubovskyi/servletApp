@@ -24,7 +24,7 @@ public class SaveServlet extends HttpServlet {
         printStatus(book, status, out);
     }
 
-    public Map<Integer, Book> putBookToMap(Book book) {
+    public Map<Integer, Book> putUserToMap(Book book) {
         Map<Integer, Book> bookMap = new HashMap<>();
         int bookID = book.getId();
         String bookTitle = book.getTitle();

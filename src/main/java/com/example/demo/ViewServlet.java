@@ -15,23 +15,23 @@ public class ViewServlet extends HttpServlet {
 
         PrintWriter out = BookRepository.getWriter(response);
         List<Book> list = BookRepository.getAllBooks();
-        printAllBooks(list, out);
+        printAllEmployees(list, out);
     }
 
-    private void getBooks(List<Book> list, PrintWriter out) {
+    private void getEmployees(List<Book> list, PrintWriter out) {
         for (Book book : list) {
             out.print(book);
         }
     }
 
-    private void printAllBooks(List<Book> list, PrintWriter out) {
+    private void printAllEmployees(List<Book> list, PrintWriter out) {
         try {
-            getBooks(list, out);
+            getEmployees(list, out);
             if (list.isEmpty()) {
                 throw new IOException();
             }
         } catch (IOException e) {
-            out.println("The table is empty!");
+            out.println("The table is Empty!");
         } finally {
             out.close();
         }
