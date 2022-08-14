@@ -14,6 +14,7 @@
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
         <lombok.version>1.18.24</lombok.version>
+        <slf4j.version>1.7.29</slf4j.version>
     </properties>
 
     <dependencies>
@@ -35,6 +36,14 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Slf4j-Log4j12 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
             <scope>provided</scope>
         </dependency>
 

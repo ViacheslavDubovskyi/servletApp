@@ -1,5 +1,8 @@
 package com.example.demo;
 
+import com.example.demo.interceptor.Logged;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -8,6 +11,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class BookRepository {
 
     /*public static void main(String[] args) {
@@ -21,6 +25,7 @@ public class BookRepository {
         save(employee);
     }*/
 
+    @Logged
     public static Connection getConnection() {
         Connection connection = null;
         String url = "jdbc:postgresql://localhost:5432/library";
@@ -41,6 +46,7 @@ public class BookRepository {
         return connection;
     }
 
+    @Logged
     public static int save(Book book) {
 
         int status = 0;
@@ -51,6 +57,7 @@ public class BookRepository {
 
             status = ps.executeUpdate();
             connection().close();
+            log.info("Status of the method: " + status);
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -58,6 +65,7 @@ public class BookRepository {
         return status;
     }
 
+    @Logged
     public static int update(Book book) {
 
         int status = 0;
@@ -76,6 +84,7 @@ public class BookRepository {
         return status;
     }
 
+    @Logged
     public static int delete(int id) {
 
         int status = 0;
@@ -92,6 +101,7 @@ public class BookRepository {
         return status;
     }
 
+    @Logged
     public static Book getBookById(int id) {
 
         Book book = new Book();
@@ -111,6 +121,7 @@ public class BookRepository {
         return book;
     }
 
+    @Logged
     public static List<Book> getAllBooks() {
 
         List<Book> listBooks = new ArrayList<>();
