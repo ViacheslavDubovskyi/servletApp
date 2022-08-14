@@ -22,7 +22,6 @@ public class BookRepository {
     }*/
 
     public static Connection getConnection() {
-
         Connection connection = null;
         String url = "jdbc:postgresql://localhost:5432/library";
         String user = "postgres";
@@ -35,6 +34,7 @@ public class BookRepository {
             } else {
                 System.out.println("Failed to make connection!");
             }
+
         } catch (SQLException sqlException) {
             System.out.println(sqlException);
         }
@@ -42,7 +42,9 @@ public class BookRepository {
     }
 
     public static int save(Book book) {
+
         int status = 0;
+
         try {
             PreparedStatement ps = connection().prepareStatement("insert into books(title,author,year) values (?,?,?)");
             setBookIntoTable(ps, book);
@@ -82,7 +84,6 @@ public class BookRepository {
             PreparedStatement ps = connection().prepareStatement("delete from books where id=?");
             ps.setInt(1, id);
             status = ps.executeUpdate();
-
             connection().close();
 
         } catch (SQLException exception) {
@@ -119,11 +120,8 @@ public class BookRepository {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-
                 Book book = new Book();
-
                 getResultSet(rs, book);
-
                 listBooks.add(book);
             }
             connection().close();
