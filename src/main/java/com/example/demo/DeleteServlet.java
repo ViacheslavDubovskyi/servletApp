@@ -28,10 +28,10 @@ public class DeleteServlet extends HttpServlet {
         try {
             out = response.getWriter();
             out.println("Deleting book by ID " + id + " was successful");
-            log.info("Deleting book by ID " + id + " is finished!");
+            log.info("delete() - end: book with ID " + id + "was deleted");
 
         } catch (IOException e) {
-            log.info("Unable to save record. IOException has appear");
+            log.info("Unable to delete record. IOException has appear");
             throw new RuntimeException(e);
         }
         out.close();

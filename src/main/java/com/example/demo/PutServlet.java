@@ -37,7 +37,7 @@ public class PutServlet extends HttpServlet {
                 out.print("Title: " + book.getTitle() + '\n');
                 out.print("Author: " + book.getAuthor() + '\n');
                 out.print("Year: " + book.getYear() + '\n');
-                log.info("Record with ID " + id + " is successfully update!");
+                log.info("update() - end: book with ID " + id + ": " + book);
             } else {
                 throw new IOException();
             }

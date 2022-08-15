@@ -22,7 +22,7 @@ public class BookRepository {
         String password = "tranquilo22";
 
         try {
-            log.info("Trying to connect to the PostgreSQL server...");
+            log.info("getConnection() - start: connecting the PostgreSQL in process");
             connection = DriverManager.getConnection(url, user, password);
             if (connection != null) {
                 log.info("Connected to the PostgreSQL server successfully!");
@@ -43,12 +43,13 @@ public class BookRepository {
         int status = 0;
 
         try {
-            log.info("Trying to save book in the table...");
-            PreparedStatement ps = getConnection().prepareStatement("insert into books(title,author,year) values (?,?,?)");
+            log.info("save() - start");
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement("insert into books(title,author,year) values (?,?,?)");
             setBookIntoTable(ps, book);
 
             status = ps.executeUpdate();
-            getConnection().close();
+            connection.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -63,13 +64,14 @@ public class BookRepository {
         int status = 0;
 
         try {
-            log.info("Trying to update record...");
-            PreparedStatement ps = getConnection().prepareStatement("update books set title=?,author=?,year=? where id=?");
+            log.info("update() - start: update record by ID");
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement("update books set title=?,author=?,year=? where id=?");
             setBookIntoTable(ps, book);
             ps.setInt(4, book.getId());
 
             status = ps.executeUpdate();
-            getConnection().close();
+            connection.close();
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
@@ -84,9 +86,11 @@ public class BookRepository {
         int status = 0;
 
         try {
-            log.info("Trying to delete book with ID " + id + "...");
-            PreparedStatement ps = getConnection().prepareStatement("delete from books where id=?");
+            log.info("delete() - start: book ID: " + id);
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement("delete from books where id=?");
             ps.setInt(1, id);
+
             status = ps.executeUpdate();
             getConnection().close();
 
@@ -103,14 +107,16 @@ public class BookRepository {
         Book book = new Book();
 
         try {
-            log.info("Trying to get book by ID " + id + "...");
-            PreparedStatement ps = getConnection().prepareStatement("select * from books where id=?");
+            log.info("getBookById() - start: book ID: " + id);
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement("select * from books where id=?");
             ps.setInt(1, id);
+
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 getBookFromTheTable(rs, book);
             }
-            getConnection().close();
+            connection.close();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -125,8 +131,9 @@ public class BookRepository {
         List<Book> listBooks = new ArrayList<>();
 
         try {
-            log.info("Trying to get list of all books from library...");
-            PreparedStatement ps = getConnection().prepareStatement("select * from books");
+            log.info("getAllBooks() - start");
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement("select * from books");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -134,7 +141,7 @@ public class BookRepository {
                 getBookFromTheTable(rs, book);
                 listBooks.add(book);
             }
-            getConnection().close();
+            connection.close();
 
         } catch (SQLException e) {
             e.printStackTrace();

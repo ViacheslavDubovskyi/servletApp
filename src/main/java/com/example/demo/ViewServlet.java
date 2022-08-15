@@ -32,9 +32,9 @@ public class ViewServlet extends HttpServlet {
     private void printAllEmployees(List<Book> list, PrintWriter out) {
         try {
             getEmployees(list, out);
-            log.info("Getting all books was successful!");
+            log.info("getAllBooks() - end: status - OK");
             if (list.isEmpty()) {
-                log.info("Unable to save record. IOException has appear");
+                log.info("IOException has appear: the table is empty");
                 throw new IOException();
             }
         } catch (IOException e) {

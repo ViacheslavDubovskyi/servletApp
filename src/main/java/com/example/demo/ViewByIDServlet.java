@@ -30,10 +30,11 @@ public class ViewByIDServlet extends HttpServlet {
     private void isExist(Map<Integer, Book> usersMap, PrintWriter out, Book book, int id) {
         if (usersMap.containsKey(id)) {
             out.print(book);
+            log.info("getBookById() - end: " + book);
         } else {
             out.print("No book with such ID!");
+            log.info("No record with such ID");
         }
-        log.info("Searching book by ID " + id + " is finished");
         out.close();
     }
 }

@@ -41,11 +41,11 @@ public class SaveServlet extends HttpServlet {
     @Logged
     private void printStatus(Book book, int status, PrintWriter out) {
         if (status > 0) {
-            log.info("Record saved successfully!");
             out.print("Record saved successfully!" + '\n');
             out.print("Title: " + book.getTitle() + '\n');
             out.print("Author: " + book.getAuthor() + '\n');
             out.print("Year: " + book.getYear() + '\n');
+            log.info("save() - end: " + book);
         } else {
             log.info("Unable to save record");
             out.println("Sorry! unable to save record");
