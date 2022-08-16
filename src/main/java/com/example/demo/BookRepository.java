@@ -92,7 +92,7 @@ public class BookRepository {
             ps.setInt(1, id);
 
             status = ps.executeUpdate();
-            getConnection().close();
+            connection.close();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
