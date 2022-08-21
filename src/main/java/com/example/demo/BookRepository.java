@@ -191,6 +191,7 @@ public class BookRepository {
         return listBooks;
     }
 
+    @Logged
     public static List<Book> getAllBooksGenre() {
 
         List<Book> listBooks = new ArrayList<>();
@@ -214,7 +215,7 @@ public class BookRepository {
         }
         return listBooks;
     }
-
+    @Logged
     public static List<Book> getBooksWithGenre() {
 
         List<Book> listBooks = new ArrayList<>();
@@ -239,12 +240,13 @@ public class BookRepository {
         return listBooks;
     }
 
+    @Logged
     public static List<Book> getBooksByGenre(String genre) {
 
         List<Book> listBooks = new ArrayList<>();
 
         try {
-            log.info("getBooksWithGenre() - start");
+            log.info("getBooksByGenre() - start");
             Connection connection = getConnection();
             PreparedStatement ps = connection.prepareStatement("select * from books LEFT JOIN genres ON books.id=genres.book_id WHERE genre=?");
             ps.setString(1, genre);
@@ -270,7 +272,7 @@ public class BookRepository {
         List<Book> listBooks = new ArrayList<>();
 
         try {
-            log.info("getAllBooksIsAvailable() - start");
+            log.info("getAllBooksIsNotAvailable() - start");
             Connection connection = getConnection();
             PreparedStatement ps = connection.prepareStatement("select * from books where is_available = FALSE");
             ResultSet rs = ps.executeQuery();
@@ -289,7 +291,7 @@ public class BookRepository {
         return listBooks;
     }
 
-
+    @Logged
     public static void setBookIntoTable(PreparedStatement ps, Book book) {
         try {
             ps.setString(1, book.getTitle());
@@ -301,6 +303,7 @@ public class BookRepository {
         }
     }
 
+    @Logged
     public static void setGenreIntoTable(PreparedStatement ps, Book book) {
         try {
             ps.setInt(1, book.getId());
@@ -311,6 +314,7 @@ public class BookRepository {
         }
     }
 
+    @Logged
     public static void getBookFromTheTable(ResultSet rs, Book book) {
         try {
             book.setId(rs.getInt(1));

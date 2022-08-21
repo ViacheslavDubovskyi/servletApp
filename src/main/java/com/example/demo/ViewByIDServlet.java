@@ -21,14 +21,14 @@ public class ViewByIDServlet extends HttpServlet {
         Book book = BookRepository.getBookById(id);
 
         SaveServlet saveServlet = new SaveServlet();
-        Map<Integer, Book> usersMap = saveServlet.putUserToMap(book);
+        Map<Integer, Book> booksMap = saveServlet.putBookToMap(book);
 
-        isExist(usersMap, out, book, id);
+        isExist(booksMap, out, book, id);
     }
 
     @Logged
-    private void isExist(Map<Integer, Book> usersMap, PrintWriter out, Book book, int id) {
-        if (usersMap.containsKey(id)) {
+    private void isExist(Map<Integer, Book> booksMap, PrintWriter out, Book book, int id) {
+        if (booksMap.containsKey(id)) {
             out.print(book);
             log.info("getBookById() - end: " + book);
         } else {

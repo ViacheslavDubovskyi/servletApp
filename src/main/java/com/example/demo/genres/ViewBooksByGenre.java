@@ -34,7 +34,7 @@ public class ViewBooksByGenre extends HttpServlet {
         for (Book element : listGenre) {
             out.print(element);
         }
-        log.info("getBookById() - end: ");
+        log.info("getBooksByGenre() - end: status - OK");
         out.close();
     }
 }

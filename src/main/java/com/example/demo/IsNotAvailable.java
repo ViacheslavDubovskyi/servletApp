@@ -8,10 +8,14 @@ import java.io.IOException;
 
 @WebServlet("/isNotAvailable")
 public class IsNotAvailable extends HttpServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         int id = BookRepository.idOfTheBook(request);
         BookRepository.isNotAvailable(id);
-        response.sendRedirect("viewIsNotAvailableServlet");
+        try {
+            response.sendRedirect("viewIsNotAvailableServlet");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
