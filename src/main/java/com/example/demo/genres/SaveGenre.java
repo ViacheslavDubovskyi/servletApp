@@ -22,7 +22,7 @@ public class SaveGenre extends HttpServlet {
         PrintWriter out = BookRepository.getWriter(response);
 
         Book book = new Book();
-        BookRepository.setGenreFromTheTable(request,book);
+        BookRepository.setGenreIntoTheTableGenres(request,book);
 
         int status = BookRepository.saveGenre(book);
         printStatus(book, status, out);

@@ -14,6 +14,7 @@ import java.util.List;
 @Slf4j
 public class BookRepository {
 
+    //Set the connection with database
     @Logged
     public static Connection getConnection() {
         Connection connection = null;
@@ -37,6 +38,7 @@ public class BookRepository {
         return connection;
     }
 
+    //Save new book in database, in the table 'books'
     @Logged
     public static int save(Book book) {
 
@@ -58,6 +60,8 @@ public class BookRepository {
         return status;
     }
 
+    //Save genre in database, in the table 'genres', for book with specific ID;
+    //foreign key 'book_id' (genres) references to the 'id'(books)
     @Logged
     public static int saveGenre(Book book) {
 
@@ -79,6 +83,8 @@ public class BookRepository {
         return status;
     }
 
+    //update already existing book in database by specific ID,
+    //parameters 'title', 'author' and 'year' can be set
     @Logged
     public static int update(Book book) {
 
@@ -101,6 +107,7 @@ public class BookRepository {
         return status;
     }
 
+    //delete book with specific ID from the table 'books'
     @Logged
     public static int delete(int id) {
 
@@ -122,6 +129,8 @@ public class BookRepository {
         return status;
     }
 
+    //set 'false' into column 'is_available' in the table 'genres'
+    //determine that the book is not available anymore
     public static int isNotAvailable(int id) {
 
         int status = 0;
@@ -142,6 +151,7 @@ public class BookRepository {
         return status;
     }
 
+    //get book by specific ID form the 'books'
     @Logged
     public static Book getBookById(int id) {
 
@@ -166,6 +176,7 @@ public class BookRepository {
         return book;
     }
 
+    //get all books that is in the database
     @Logged
     public static List<Book> getAllBooks() {
 
@@ -191,6 +202,8 @@ public class BookRepository {
         return listBooks;
     }
 
+    //get the list of all books and all parameters 'genre',
+    //which was set in the table 'genres', including 'null' values
     @Logged
     public static List<Book> getAllBooksGenre() {
 
@@ -215,6 +228,9 @@ public class BookRepository {
         }
         return listBooks;
     }
+
+    //get the list of all books that have some genre,
+    //which was set in the table 'genres'
     @Logged
     public static List<Book> getBooksWithGenre() {
 
@@ -240,6 +256,7 @@ public class BookRepository {
         return listBooks;
     }
 
+    //get the list of all books which have specific genre
     @Logged
     public static List<Book> getBooksByGenre(String genre) {
 
@@ -266,6 +283,7 @@ public class BookRepository {
         return listBooks;
     }
 
+    //get the list of all books that are not available anymore
     @Logged
     public static List<Book> getAllBooksIsNotAvailable() {
 
@@ -291,6 +309,7 @@ public class BookRepository {
         return listBooks;
     }
 
+    //setting parameters for the new book into table 'books', is used in method save()
     @Logged
     public static void setBookIntoTable(PreparedStatement ps, Book book) {
         try {
@@ -303,6 +322,7 @@ public class BookRepository {
         }
     }
 
+    //setting parameters into table 'genres', is used in method saveGenre()
     @Logged
     public static void setGenreIntoTable(PreparedStatement ps, Book book) {
         try {
@@ -314,6 +334,7 @@ public class BookRepository {
         }
     }
 
+    //get parameters from corresponding columns
     @Logged
     public static void getBookFromTheTable(ResultSet rs, Book book) {
         try {
@@ -329,6 +350,7 @@ public class BookRepository {
         }
     }
 
+    //setting parameters, which are updated in method update()
     public static void setBookInformation(HttpServletRequest request, Book book) {
         String title = request.getParameter("title");
         String author = request.getParameter("author");
@@ -338,13 +360,15 @@ public class BookRepository {
         book.setYear(year);
     }
 
-    public static void setGenreFromTheTable(HttpServletRequest request, Book book) {
+    //setting parameters into the table the 'genres' in the method saveGenre()
+    public static void setGenreIntoTheTableGenres(HttpServletRequest request, Book book) {
         String bookId = request.getParameter("book_id");
         String genre = request.getParameter("genre");
         book.setId(Integer.parseInt(bookId));
         book.setGenre(genre);
     }
 
+    //getting PrintWriter object
     public static PrintWriter getWriter(HttpServletResponse response) {
         response.setContentType("text/plain");
         PrintWriter out;
@@ -357,11 +381,13 @@ public class BookRepository {
         return out;
     }
 
+    //requesting ID from the database of the already existing book
     public static int idOfTheBook(HttpServletRequest request) {
         String sid = request.getParameter("id");
         return Integer.parseInt(sid);
     }
 
+    //requesting genre from the database from table 'genres'
     public static String genreOfTheBook(HttpServletRequest request) {
         return request.getParameter("genre");
     }
