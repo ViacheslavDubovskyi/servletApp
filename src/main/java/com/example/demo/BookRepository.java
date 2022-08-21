@@ -343,6 +343,7 @@ public class BookRepository {
             book.setAuthor(rs.getString(3));
             book.setYear(rs.getString(4));
             book.setIsAvailable(rs.getBoolean(5));
+            book.setIsUpdated(rs.getBoolean(6));
             book.setGenre(rs.getString(9));
         } catch (SQLException e) {
             e.printStackTrace();

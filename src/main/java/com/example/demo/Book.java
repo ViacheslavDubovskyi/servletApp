@@ -30,6 +30,7 @@ public class Book {
                 ", author='" + author + '\'' +
                 ", year=" + year + '\'' +
                 ", isAvailable=" + isAvailable + '\'' +
+                ", isUpdated=" + isUpdated + '\'' +
                 ", genre=" + genre + '\'' +
                 '}' + '\n';
     }
