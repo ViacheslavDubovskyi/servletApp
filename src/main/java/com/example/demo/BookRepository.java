@@ -93,7 +93,7 @@ public class BookRepository {
         try {
             log.info("update() - start: update record by ID");
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement("update books set title=?,author=?,year=? where id=?");
+            PreparedStatement ps = connection.prepareStatement("update books set title=?,author=?,year=?,is_updated=true where id=?");
             setBookIntoTable(ps, book);
             ps.setInt(4, book.getId());
 

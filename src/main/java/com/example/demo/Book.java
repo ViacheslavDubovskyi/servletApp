@@ -13,6 +13,7 @@ public class Book {
     private String author;
     private String year;
     private Boolean isAvailable = Boolean.TRUE;
+    private Boolean isUpdated = Boolean.FALSE;
     private String genre;
 
     public Book(String title, String author, String year) {
