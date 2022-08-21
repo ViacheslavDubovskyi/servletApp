@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/isNotAvailable")
-public class isNotAvailable extends HttpServlet {
+public class IsNotAvailable extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         int id = BookRepository.idOfTheBook(request);
