@@ -343,7 +343,7 @@ public class BookRepository {
             book.setAuthor(rs.getString(3));
             book.setYear(rs.getString(4));
             book.setIsAvailable(rs.getBoolean(5));
-            book.setGenre(rs.getString(8));
+            book.setGenre(rs.getString(9));
         } catch (SQLException e) {
             e.printStackTrace();
             log.info("Something went wrong. SQLException appears.");
