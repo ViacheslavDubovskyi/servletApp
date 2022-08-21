@@ -239,6 +239,31 @@ public class BookRepository {
         return listBooks;
     }
 
+    public static List<Book> getBooksByGenre(String genre) {
+
+        List<Book> listBooks = new ArrayList<>();
+
+        try {
+            log.info("getBooksWithGenre() - start");
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement("select * from books LEFT JOIN genres ON books.id=genres.book_id WHERE genre=?");
+            ps.setString(1, genre);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Book book = new Book();
+                getBookFromTheTable(rs, book);
+                listBooks.add(book);
+            }
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
+        }
+        return listBooks;
+    }
+
     @Logged
     public static List<Book> getAllBooksIsNotAvailable() {
 
@@ -263,6 +288,7 @@ public class BookRepository {
         }
         return listBooks;
     }
+
 
     public static void setBookIntoTable(PreparedStatement ps, Book book) {
         try {
@@ -330,5 +356,9 @@ public class BookRepository {
     public static int idOfTheBook(HttpServletRequest request) {
         String sid = request.getParameter("id");
         return Integer.parseInt(sid);
+    }
+
+    public static String genreOfTheBook(HttpServletRequest request) {
+        return request.getParameter("genre");
     }
 }

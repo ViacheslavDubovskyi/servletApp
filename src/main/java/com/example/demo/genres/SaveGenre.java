@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.genres;
 
+import com.example.demo.Book;
+import com.example.demo.BookRepository;
 import com.example.demo.interceptor.Logged;
 import lombok.extern.slf4j.Slf4j;
 

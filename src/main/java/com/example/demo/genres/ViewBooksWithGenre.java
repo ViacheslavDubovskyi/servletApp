@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.genres;
 
+import com.example.demo.Book;
+import com.example.demo.BookRepository;
 import com.example.demo.interceptor.Logged;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,14 +14,14 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @Slf4j
-@WebServlet("/viewBooksGenre")
-public class GetBooksGenre extends HttpServlet {
+@WebServlet("/viewBooksWithGenre")
+public class ViewBooksWithGenre extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         PrintWriter out = BookRepository.getWriter(response);
-        List<Book> list = BookRepository.getAllBooksGenre();
-        printAllBooksGenre(list, out);
+        List<Book> list = BookRepository.getBooksWithGenre();
+        printAllEmployees(list, out);
     }
 
     private void getBooks(List<Book> list, PrintWriter out) {
@@ -29,14 +31,14 @@ public class GetBooksGenre extends HttpServlet {
     }
 
     @Logged
-    private void printAllBooksGenre(List<Book> list, PrintWriter out) {
+    private void printAllEmployees(List<Book> list, PrintWriter out) {
         try {
             getBooks(list, out);
+            log.info("getAllBooks() - end: status - OK");
             if (list.isEmpty()) {
                 log.info("IOException has appear: the table is empty");
                 throw new IOException();
             }
-            log.info("getAllBooksGenre() - end: status - OK");
         } catch (IOException e) {
             out.println("The table is Empty!");
         } finally {
