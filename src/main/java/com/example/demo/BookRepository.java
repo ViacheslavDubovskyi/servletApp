@@ -101,6 +101,26 @@ public class BookRepository {
         return status;
     }
 
+    public static int isAvailable(int id) {
+
+        int status = 0;
+
+        try {
+            log.info("isDeleted() - start: book ID: " + id);
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement("UPDATE books SET is_available = FALSE where id = ?");
+            ps.setInt(1, id);
+
+            status = ps.executeUpdate();
+            connection.close();
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
+        }
+        return status;
+    }
+
     @Logged
     public static Book getBookById(int id) {
 
@@ -150,6 +170,31 @@ public class BookRepository {
         return listBooks;
     }
 
+    @Logged
+    public static List<Book> getAllBooksIsAvailable() {
+
+        List<Book> listBooks = new ArrayList<>();
+
+        try {
+            log.info("getAllBooksIsAvailable() - start");
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement("select * from books where is_available = FALSE");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book();
+                getBookFromTheTable(rs, book);
+                listBooks.add(book);
+            }
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
+        }
+        return listBooks;
+    }
+
     public static void setBookIntoTable(PreparedStatement ps, Book book) {
         try {
             ps.setString(1, book.getTitle());
@@ -167,6 +212,7 @@ public class BookRepository {
             book.setTitle(rs.getString(2));
             book.setAuthor(rs.getString(3));
             book.setYear(rs.getString(4));
+            book.setIsAvailable(rs.getBoolean(5));
         } catch (SQLException e) {
             e.printStackTrace();
             log.info("Something went wrong. SQLException appears.");
