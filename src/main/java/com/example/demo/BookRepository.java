@@ -122,12 +122,12 @@ public class BookRepository {
         return status;
     }
 
-    public static int isAvailable(int id) {
+    public static int isNotAvailable(int id) {
 
         int status = 0;
 
         try {
-            log.info("isDeleted() - start: book ID: " + id);
+            log.info("isNotAvailable() - start: book ID: " + id);
             Connection connection = getConnection();
             PreparedStatement ps = connection.prepareStatement("UPDATE books SET is_available = FALSE where id = ?");
             ps.setInt(1, id);
@@ -216,7 +216,7 @@ public class BookRepository {
     }
 
     @Logged
-    public static List<Book> getAllBooksIsAvailable() {
+    public static List<Book> getAllBooksIsNotAvailable() {
 
         List<Book> listBooks = new ArrayList<>();
 

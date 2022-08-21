@@ -12,13 +12,13 @@ import java.io.PrintWriter;
 import java.util.List;
 
 @Slf4j
-@WebServlet("/viewIsAvailableServlet")
-public class ViewIsAvailableServlet extends HttpServlet {
+@WebServlet("/viewIsNotAvailableServlet")
+public class ViewIsNotAvailableServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         PrintWriter out = BookRepository.getWriter(response);
-        List<Book> list = BookRepository.getAllBooksIsAvailable();
+        List<Book> list = BookRepository.getAllBooksIsNotAvailable();
         printAllAvailableBooks(list, out);
     }
 
