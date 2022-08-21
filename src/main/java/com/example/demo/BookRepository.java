@@ -59,6 +59,27 @@ public class BookRepository {
     }
 
     @Logged
+    public static int saveGenre(Book book) {
+
+        int status = 0;
+
+        try {
+            log.info("saveGenre() - start");
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement("insert into genres(book_id, genre) values (?,?)");
+            setGenreIntoTable(ps, book);
+
+            status = ps.executeUpdate();
+            connection.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
+        }
+        return status;
+    }
+
+    @Logged
     public static int update(Book book) {
 
         int status = 0;
@@ -170,6 +191,30 @@ public class BookRepository {
         return listBooks;
     }
 
+    public static List<Book> getAllBooksGenre() {
+
+        List<Book> listBooks = new ArrayList<>();
+
+        try {
+            log.info("getAllBooksGenre() - start");
+            Connection connection = getConnection();
+            PreparedStatement ps = connection.prepareStatement("select * from books LEFT JOIN genres ON books.id=genres.book_id");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Book book = new Book();
+                getBookFromTheTable(rs, book);
+                listBooks.add(book);
+            }
+            connection.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
+        }
+        return listBooks;
+    }
+
     @Logged
     public static List<Book> getAllBooksIsAvailable() {
 
@@ -206,6 +251,16 @@ public class BookRepository {
         }
     }
 
+    public static void setGenreIntoTable(PreparedStatement ps, Book book) {
+        try {
+            ps.setInt(1, book.getId());
+            ps.setString(2, book.getGenre());
+        } catch (SQLException e) {
+            e.printStackTrace();
+            log.info("Something went wrong. SQLException appears.");
+        }
+    }
+
     public static void getBookFromTheTable(ResultSet rs, Book book) {
         try {
             book.setId(rs.getInt(1));
@@ -213,10 +268,27 @@ public class BookRepository {
             book.setAuthor(rs.getString(3));
             book.setYear(rs.getString(4));
             book.setIsAvailable(rs.getBoolean(5));
+            book.setGenre(rs.getString(8));
         } catch (SQLException e) {
             e.printStackTrace();
             log.info("Something went wrong. SQLException appears.");
         }
+    }
+
+    public static void setBookInformation(HttpServletRequest request, Book book) {
+        String title = request.getParameter("title");
+        String author = request.getParameter("author");
+        String year = request.getParameter("year");
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setYear(year);
+    }
+
+    public static void setGenreFromTheTable(HttpServletRequest request, Book book) {
+        String bookId = request.getParameter("book_id");
+        String genre = request.getParameter("genre");
+        book.setId(Integer.parseInt(bookId));
+        book.setGenre(genre);
     }
 
     public static PrintWriter getWriter(HttpServletResponse response) {
@@ -229,15 +301,6 @@ public class BookRepository {
             throw new RuntimeException(e);
         }
         return out;
-    }
-
-    public static void setBookInformation(HttpServletRequest request, Book book) {
-        String title = request.getParameter("title");
-        String author = request.getParameter("author");
-        String year = request.getParameter("year");
-        book.setTitle(title);
-        book.setAuthor(author);
-        book.setYear(year);
     }
 
     public static int idOfTheBook(HttpServletRequest request) {

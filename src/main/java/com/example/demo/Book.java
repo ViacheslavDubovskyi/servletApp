@@ -13,6 +13,7 @@ public class Book {
     private String author;
     private String year;
     private Boolean isAvailable = Boolean.TRUE;
+    private String genre;
 
     public Book(String title, String author, String year) {
         this.title = title;
@@ -27,6 +28,8 @@ public class Book {
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", year=" + year + '\'' +
+                ", isAvailable=" + isAvailable + '\'' +
+                ", genre=" + genre + '\'' +
                 '}' + '\n';
     }
 }
