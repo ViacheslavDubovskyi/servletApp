@@ -239,7 +239,7 @@ public class BookRepository {
         try {
             log.info("getBooksWithGenre() - start");
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement("select * from books LEFT JOIN genres ON books.id=genres.book_id WHERE genre is not null");
+            PreparedStatement ps = connection.prepareStatement("select * from books INNER JOIN genres ON books.id=genres.book_id");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
