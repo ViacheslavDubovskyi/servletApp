@@ -19,7 +19,7 @@ public class ViewServlet extends HttpServlet {
 
         PrintWriter out = BookRepository.getWriter(response);
         List<Book> list = BookRepository.getAllBooks();
-        printAllEmployees(list, out);
+        printAllBooks(list, out);
     }
 
     private void getBooks(List<Book> list, PrintWriter out) {
@@ -29,7 +29,7 @@ public class ViewServlet extends HttpServlet {
     }
 
     @Logged
-    private void printAllEmployees(List<Book> list, PrintWriter out) {
+    private void printAllBooks(List<Book> list, PrintWriter out) {
         try {
             getBooks(list, out);
             log.info("getAllBooks() - end: status - OK");

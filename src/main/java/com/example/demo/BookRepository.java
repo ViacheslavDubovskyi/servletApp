@@ -14,13 +14,27 @@ import java.util.List;
 @Slf4j
 public class BookRepository {
 
+    private static final String UPDATE_BOOK =
+            """
+            UPDATE books
+            SET title = ?, author = ?, year = ?
+            WHERE id = ?
+            """;
+
+    private static final String UPDATE_BOOK_INFO =
+            """
+            UPDATE book_info
+            SET is_updated = TRUE
+            WHERE book_id = ?
+            """;
+
     //Set the connection with database
     @Logged
     public static Connection getConnection() {
         Connection connection = null;
         String url = "jdbc:postgresql://localhost:5432/library";
         String user = "postgres";
-        String password = "tranquilo22";
+        String password = "postgres";
 
         try {
             log.info("getConnection() - start: connecting the PostgreSQL in process");
@@ -70,7 +84,7 @@ public class BookRepository {
         try {
             log.info("saveGenre() - start");
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement("insert into genres(book_id, genre) values (?,?)");
+            PreparedStatement ps = connection.prepareStatement("insert into book_info(book_id, genre) values (?,?)");
             setGenreIntoTable(ps, book);
 
             status = ps.executeUpdate();
@@ -93,16 +107,24 @@ public class BookRepository {
         try {
             log.info("update() - start: update record by ID");
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement("update books set title=?,author=?,year=?,is_updated=true where id=?");
-            setBookIntoTable(ps, book);
-            ps.setInt(4, book.getId());
+            PreparedStatement bookPS = connection.prepareStatement(UPDATE_BOOK);
+            PreparedStatement infoPS = connection.prepareStatement(UPDATE_BOOK_INFO);
 
-            status = ps.executeUpdate();
+            connection.setAutoCommit(false);
+
+            setBookIntoTable(bookPS, book);
+            bookPS.setInt(4, book.getId());
+            status = bookPS.executeUpdate();
+
+            infoPS.setInt(1, book.getId());
+            infoPS.executeUpdate();
+
+            connection.commit();
             connection.close();
 
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+            log.error("Something went wrong. SQLException appears.", sqlException);
         }
         return status;
     }
@@ -138,7 +160,7 @@ public class BookRepository {
         try {
             log.info("isNotAvailable() - start: book ID: " + id);
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement("UPDATE books SET is_available = FALSE where id = ?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE book_info SET is_available = FALSE where id = ?");
             ps.setInt(1, id);
 
             status = ps.executeUpdate();
@@ -212,7 +234,7 @@ public class BookRepository {
         try {
             log.info("getAllBooksGenre() - start");
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement("select * from books LEFT JOIN genres ON books.id=genres.book_id");
+            PreparedStatement ps = connection.prepareStatement("select * from books LEFT JOIN book_info ON books.id=book_info.book_id");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -239,7 +261,7 @@ public class BookRepository {
         try {
             log.info("getBooksWithGenre() - start");
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement("select * from books INNER JOIN genres ON books.id=genres.book_id");
+            PreparedStatement ps = connection.prepareStatement("select * from books INNER JOIN book_info ON books.id=book_info.book_id");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -265,7 +287,7 @@ public class BookRepository {
         try {
             log.info("getBooksByGenre() - start");
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement("select * from books LEFT JOIN genres ON books.id=genres.book_id WHERE genre=?");
+            PreparedStatement ps = connection.prepareStatement("select * from books LEFT JOIN book_info ON books.id=book_info.book_id WHERE genre=?");
             ps.setString(1, genre);
 
             ResultSet rs = ps.executeQuery();
@@ -292,7 +314,7 @@ public class BookRepository {
         try {
             log.info("getAllBooksIsNotAvailable() - start");
             Connection connection = getConnection();
-            PreparedStatement ps = connection.prepareStatement("select * from books where is_available = FALSE");
+            PreparedStatement ps = connection.prepareStatement("select * from books LEFT JOIN book_info ON books.id = book_info.book_id where is_available = FALSE");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
