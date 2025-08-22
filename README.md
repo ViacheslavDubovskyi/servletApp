@@ -1,4 +1,4 @@
-📚 Library Project
+📚 **Library Project**
 
 This is a simple library management system built using Java Servlets, JDBC, and PostgreSQL. 
 The project allows adding, viewing, updating, and deleting books, as well as managing genres and book availability.
