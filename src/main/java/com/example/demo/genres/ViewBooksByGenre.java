@@ -2,20 +2,17 @@ package com.example.demo.genres;
 
 import com.example.demo.Book;
 import com.example.demo.BookRepository;
-import com.example.demo.SaveServlet;
 import com.example.demo.interceptor.Logged;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 
 import static com.example.demo.BookRepository.genreOfTheBook;
-import static com.example.demo.BookRepository.getBookById;
 
 @Slf4j
 @WebServlet("/viewBooksByGenre")

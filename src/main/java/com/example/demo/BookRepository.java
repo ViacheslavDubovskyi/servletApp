@@ -3,8 +3,8 @@ package com.example.demo;
 import com.example.demo.interceptor.Logged;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -337,7 +337,7 @@ public class BookRepository {
         try {
             ps.setString(1, book.getTitle());
             ps.setString(2, book.getAuthor());
-            ps.setString(3, book.getYear());
+            ps.setInt(3, Integer.parseInt(book.getYear()));
         } catch (SQLException e) {
             e.printStackTrace();
             log.info("Something went wrong. SQLException appears.");
