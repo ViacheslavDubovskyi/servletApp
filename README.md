@@ -47,14 +47,11 @@ The application uses the following default connection settings (defined in code)
 
 ⚙️ **Build & Run**
 
-The project is built with Maven.
+If you want to deploy to a Wildfly:
 
-Build
-```
-mvn clean install
-```
-
-Run
+1. Start the Wildfly server.
+1. Run build.bat
+2. Run deploy-wildfly.bat
 
 Deploy the WAR file to a Servlet container like Tomcat:
 
