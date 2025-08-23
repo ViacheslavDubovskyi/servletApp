@@ -49,7 +49,7 @@ The application uses the following default connection settings (defined in code)
 
 If you want to deploy to a Wildfly:
 
-1. Start the Wildfly server.
+1. Start the Wildfly server and go to http://localhost:9990/
 1. Run build.bat
 2. Run deploy-wildfly.bat
 
