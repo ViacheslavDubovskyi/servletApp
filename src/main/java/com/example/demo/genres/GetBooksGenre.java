@@ -38,9 +38,9 @@ public class GetBooksGenre extends HttpServlet {
                 log.info("IOException has appear: the table is empty");
                 throw new IOException();
             }
-            log.info("getAllBooksGenre() - end: status - OK");
+            log.info("getAllBooksGenre() - end: {}, status - OK", list);
         } catch (IOException e) {
-            out.println("The table is Empty!");
+            out.println("The table is empty!");
         } finally {
             out.close();
         }

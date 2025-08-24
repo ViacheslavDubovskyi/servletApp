@@ -32,7 +32,7 @@ public class SaveGenre extends HttpServlet {
     private void printStatus(Book book, int status, PrintWriter out) {
         if (status > 0) {
             out.print("Record saved successfully!" + '\n');
-            log.info("saveGenre() - end: " + book);
+            log.info("saveGenre() - end: {}", book);
         } else {
             log.info("Unable to save record");
             out.println("Sorry! unable to save record");

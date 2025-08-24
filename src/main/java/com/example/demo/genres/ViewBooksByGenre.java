@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.PrintWriter;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class ViewBooksByGenre extends HttpServlet {
         for (Book element : listGenre) {
             out.print(element);
         }
-        log.info("getBooksByGenre() - end: status - OK");
+        log.info("getBooksByGenre() - end: {}, status - OK", listGenre);
         out.close();
     }
 }
