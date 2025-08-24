@@ -8,7 +8,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
-import java.util.Map;
 
 @Slf4j
 @WebServlet("/viewByIDServlet")
@@ -20,17 +19,14 @@ public class ViewByIDServlet extends HttpServlet {
         int id = BookRepository.idOfTheBook(request);
         Book book = BookRepository.getBookById(id);
 
-        SaveServlet saveServlet = new SaveServlet();
-        Map<Integer, Book> booksMap = saveServlet.putBookToMap(book);
-
-        isExist(booksMap, out, book, id);
+        isExist(out, book, id);
     }
 
     @Logged
-    private void isExist(Map<Integer, Book> booksMap, PrintWriter out, Book book, int id) {
-        if (booksMap.containsKey(id)) {
+    private void isExist(PrintWriter out, Book book, int id) {
+        if (book != null) {
             out.print(book);
-            log.info("getBookById() - end: " + book);
+            log.info("getBookById() - end: {}", book);
         } else {
             out.print("No book with such ID!");
             log.info("No record with such ID");
