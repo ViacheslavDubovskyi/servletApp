@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -16,17 +17,17 @@ public class BookRepository {
 
     private static final String UPDATE_BOOK =
             """
-            UPDATE books
-            SET title = ?, author = ?, year = ?
-            WHERE id = ?
-            """;
+                    UPDATE books
+                    SET title = ?, author = ?, year = ?
+                    WHERE id = ?
+                    """;
 
     private static final String UPDATE_BOOK_INFO =
             """
-            UPDATE book_info
-            SET is_updated = TRUE
-            WHERE book_id = ?
-            """;
+                    UPDATE book_info
+                    SET is_updated = TRUE
+                    WHERE book_id = ?
+                    """;
 
     //Set the connection with database
     @Logged
@@ -45,9 +46,8 @@ public class BookRepository {
                 log.info("Failed to make connection!");
             }
 
-        } catch (SQLException sqlException) {
-            System.out.println(sqlException);
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return connection;
     }
@@ -68,8 +68,7 @@ public class BookRepository {
             connection.close();
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return status;
     }
@@ -91,8 +90,7 @@ public class BookRepository {
             connection.close();
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return status;
     }
@@ -122,9 +120,8 @@ public class BookRepository {
             connection.commit();
             connection.close();
 
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-            log.error("Something went wrong. SQLException appears.", sqlException);
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return status;
     }
@@ -136,7 +133,7 @@ public class BookRepository {
         int status = 0;
 
         try {
-            log.info("delete() - start: book ID: " + id);
+            log.info("delete() - start: book ID: {}", id);
             Connection connection = getConnection();
             PreparedStatement ps = connection.prepareStatement("delete from books where id=?");
             ps.setInt(1, id);
@@ -144,9 +141,8 @@ public class BookRepository {
             status = ps.executeUpdate();
             connection.close();
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return status;
     }
@@ -158,7 +154,7 @@ public class BookRepository {
         int status = 0;
 
         try {
-            log.info("isNotAvailable() - start: book ID: " + id);
+            log.info("isNotAvailable() - start: book ID: {}", id);
             Connection connection = getConnection();
             PreparedStatement ps = connection.prepareStatement("UPDATE book_info SET is_available = FALSE where id = ?");
             ps.setInt(1, id);
@@ -166,9 +162,8 @@ public class BookRepository {
             status = ps.executeUpdate();
             connection.close();
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return status;
     }
@@ -180,7 +175,7 @@ public class BookRepository {
         Book book = new Book();
 
         try {
-            log.info("getBookById() - start: book ID: " + id);
+            log.info("getBookById() - start: book ID: {}", id);
             Connection connection = getConnection();
             PreparedStatement ps = connection.prepareStatement("select * from books where id=?");
             ps.setInt(1, id);
@@ -191,9 +186,8 @@ public class BookRepository {
             }
             connection.close();
 
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return book;
     }
@@ -217,9 +211,8 @@ public class BookRepository {
             }
             connection.close();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return listBooks;
     }
@@ -244,9 +237,8 @@ public class BookRepository {
             }
             connection.close();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return listBooks;
     }
@@ -271,9 +263,8 @@ public class BookRepository {
             }
             connection.close();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return listBooks;
     }
@@ -298,9 +289,8 @@ public class BookRepository {
             }
             connection.close();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return listBooks;
     }
@@ -324,9 +314,8 @@ public class BookRepository {
             }
             connection.close();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
         return listBooks;
     }
@@ -338,9 +327,8 @@ public class BookRepository {
             ps.setString(1, book.getTitle());
             ps.setString(2, book.getAuthor());
             ps.setInt(3, Integer.parseInt(book.getYear()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
     }
 
@@ -350,9 +338,8 @@ public class BookRepository {
         try {
             ps.setInt(1, book.getId());
             ps.setString(2, book.getGenre());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
     }
 
@@ -367,9 +354,8 @@ public class BookRepository {
             book.setIsAvailable(rs.getBoolean(5));
             book.setIsUpdated(rs.getBoolean(6));
             book.setGenre(rs.getString(9));
-        } catch (SQLException e) {
-            e.printStackTrace();
-            log.info("Something went wrong. SQLException appears.");
+        } catch (SQLException ex) {
+            log.error("Something went wrong. SQLException appears.", ex);
         }
     }
 
